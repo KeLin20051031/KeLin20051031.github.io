@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吕子乔励志师 - 人生导师 | 情感专家 | 成功学教父</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #1a0a2e 0%, #4a1a6b 50%, #1a0a2e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* 闪烁的星星背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: gold;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* 头部 */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(180deg, rgba(255,215,0,0.1) 0%, transparent 100%);
+        }
+
+        .crown {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255,215,0,0.5);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #FFA500;
+            letter-spacing: 10px;
+            margin-bottom: 20px;
+        }
+
+        .slogan {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            color: #FF69B4;
+            text-shadow: 0 0 20px rgba(255,105,180,0.5);
+        }
+
+        /* 导航 */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        nav a {
+            color: #FFD700;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border: 2px solid #FFD700;
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #FFD700;
+            color: #1a0a2e;
+            box-shadow: 0 0 20px #FFD700;
+        }
+
+        /* 主要内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 头衔卡片 */
+        .titles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .title-card {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,105,180,0.1));
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .title-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255,215,0,0.3);
+        }
+
+        .title-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .title-card h3 {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .title-card p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        /* 金句区 */
+        .quotes-section {
+            margin: 80px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #FF69B4;
+            font-size: 1.5rem;
+        }
+
+        .section-title::before {
+            left: -40px;
+        }
+
+        .section-title::after {
+            right: -40px;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,105,180,0.15));
+            border: 3px solid;
+            border-image: linear-gradient(45deg, #FFD700, #FF69B4) 1;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 800px;
+            position: relative;
+        }
+
+        .quote-box::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 100px;
+            color: #FFD700;
+            opacity: 0.5;
+            font-family: serif;
+        }
+
+        .quote-text {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            color: #fff;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .quote-author {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+        /* 成功案例 */
+        .cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .case-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .case-card:hover {
+            border-color: #FFD700;
+            transform: scale(1.02);
+        }
+
+        .case-header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .case-avatar {
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .case-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #1a0a2e;
+        }
+
+        .case-body {
+            padding: 30px;
+        }
+
+        .case-title {
+            color: #FFD700;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .case-desc {
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .case-result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 10px;
+            color: #FFD700;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* 服务价格 */
+        .pricing {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 60px 0;
+        }
+
+        .price-card {
+            background: linear-gradient(135deg, rgba(255,215,0,0.1), rgba(255,105,180,0.1));
+            border: 3px solid #FFD700;
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card.featured {
+            border-color: #FF69B4;
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(255,105,180,0.3);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #FF69B4;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transform: rotate(15deg);
+        }
+
+        .price-name {
+            font-size: 1.5rem;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .price-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+
+        .price-amount span {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .price-features {
+            list-style: none;
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .price-features li {
+            padding: 10px 0;
+            color: #ccc;
+            border-bottom: 1px solid rgba(255,215,0,0.2);
+        }
+
+        .price-features li::before {
+            content: '✓';
+            color: #FFD700;
+            margin-right: 10px;
+        }
+
+        .btn-gold {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #1a0a2e;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-gold:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255,215,0,0.5);
+        }
+
+        /* 联系方式 */
+        .contact {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(180deg, transparent, rgba(255,215,0,0.1));
+        }
+
+        .contact-title {
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin-bottom: 30px;
+        }
+
+        .contact-slogan {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 2rem;
+            color: #FF69B4;
+            margin-bottom: 40px;
+        }
+
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 30px;
+            background: rgba(255,215,0,0.1);
+            border: 2px solid #FFD700;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            color: #FFD700;
+        }
+
+        .contact-item span:first-child {
+            font-size: 30px;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.5);
+            border-top: 2px solid #FFD700;
+        }
+
+        .footer-slogan {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.5rem;
+            color: #FF69B4;
+            margin-bottom: 20px;
+        }
+
+        .copyright {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .disclaimer {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,0,0,0.1);
+            border: 1px dashed #FF69B4;
+            border-radius: 10px;
+            color: #FF69B4;
+            font-size: 0.8rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 跑马灯 */
+        .marquee {
+            background: #FFD700;
+            color: #1a0a2e;
+            padding: 15px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            nav a {
+                font-size: 1rem;
+                padding: 8px 15px;
+            }
+            
+            .quote-text {
+                font-size: 1.5rem;
+            }
+            
+            .price-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <!-- 跑马灯 -->
+    <div class="marquee">
+        <div class="marquee-content">
+            🌟 限时优惠！前100名咨询者免费获得《泡妞三十六计》电子版！🌟 人生苦短，必须性感！🌟 跟着子乔走，女神全都有！🌟 限时优惠！前100名咨询者免费获得《泡妞三十六计》电子版！🌟 人生苦短，必须性感！🌟 跟着子乔走，女神全都有！🌟
+        </div>
+    </div>
+
+    <!-- 头部 -->
+    <header>
+        <div class="crown">👑</div>
+        <h1>吕子乔励志师</h1>
+        <p class="subtitle">LÜ ZIQIAO · LIFE COACH</p>
+        <p class="slogan">"人生苦短，必须性感！"</p>
+    </header>
+
+    <!-- 导航 -->
+    <nav>
+        <a href="#about">关于我</a>
+        <a href="#quotes">子乔金句</a>
+        <a href="#cases">成功案例</a>
+        <a href="#pricing">咨询服务</a>
+        <a href="#contact">立即预约</a>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 头衔介绍 -->
+        <section id="about">
+            <div class="titles">
+                <div class="title-card">
+                    <div class="title-icon">🎯</div>
+                    <h3>情感专家</h3>
+                    <p>专注恋爱心理学20年，帮助10000+单身男女脱单</p>
+                </div>
+                <div class="title-card">
+                    <div class="title-icon">💎</div>
+                    <h3>人生导师</h3>
+                    <p>独创"子乔成功学"，引领无数人走向人生巅峰</p>
+                </div>
+                <div class="title-card">
+                    <div class="title-icon">🔥</div>
+                    <h3>魅力教父</h3>
+                    <p>被誉为"爱情公寓最懂女人的男人"</p>
+                </div>
+                <div class="title-card">
+                    <div class="title-icon">⚡</div>
+                    <h3>励志大师</h3>
+                    <p>《泡妞三十六计》畅销书作者，销量破百万</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 子乔金句 -->
+        <section id="quotes" class="quotes-section">
+            <h2 class="section-title">子乔金句</h2>
+            
+            <div class="quote-box">
+                <p class="quote-text">"人生没有彩排，每一天都是现场直播，所以每天都要精彩！"</p>
+                <p class="quote-author">—— 吕子乔 · 人生哲学</p>
+            </div>
+
+            <div class="quote-box">
+                <p class="quote-text">"男人就好比洋葱，要想看到洋葱的心，就需要一层一层去剥，但是你在剥的过程中会不断流泪，剥到最后才发现，原来洋葱是没有心的。"</p>
+                <p class="quote-author">—— 吕子乔 · 情感洞察</p>
+            </div>
+
+            <div class="quote-box">
+                <p class="quote-text">"火车是朝前开的，去哪并不重要，关键在于窗外的风景。"</p>
+                <p class="quote-author">—— 吕子乔 · 生活智慧</p>
+            </div>
+
+            <div class="quote-box">
+                <p class="quote-text">"即使明天是世界末日，我们也要活得精彩，因为我们会死很久！"</p>
+                <p class="quote-author">—— 吕子乔 · 终极奥义</p>
+            </div>
+        </section>
+
+        <!-- 成功案例 -->
+        <section id="cases">
+            <h2 class="section-title">成功案例</h2>
+            <div class="cases">
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-avatar">👨</div>
+                        <div class="case-name">张伟</div>
+                    </div>
+                    <div class="case-body">
+                        <p class="case-title">从"屌丝"到"男神"的逆袭</p>
+                        <p class="case-desc">曾经的张伟是个连话都不敢和女生说的律师，经过子乔老师3个月的特训，现在已经是爱情公寓最受欢迎的单身汉！</p>
+                        <div class="case-result">✨ 成功约会女神级客户，现已订婚！</div>
+                    </div>
+                </div>
+
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-avatar">👩</div>
+                        <div class="case-name">胡一菲</div>
+                    </div>
+                    <div class="case-body">
+                        <p class="case-title">女博士的爱情觉醒</p>
+                        <p class="case-desc">作为爱情公寓的"大姐大"，一菲一直找不到合适的对象。子乔老师帮她发现了自己的魅力，学会了温柔...</p>
+                        <div class="case-result">✨ 现已与曾小贤修成正果！</div>
+                    </div>
+                </div>
+
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-avatar">🧑</div>
+                        <div class="case-name">关谷神奇</div>
+                    </div>
+                    <div class="case-body">
+                        <p class="case-title">跨国恋情的成功秘籍</p>
+                        <p class="case-desc">来自日本的漫画家关谷，在中国遇到了语言和文化障碍。子乔老师教他如何用"子乔式幽默"征服女生...</p>
+                        <div class="case-result">✨ 与悠悠甜蜜结婚，幸福美满！</div>
+                    </div>
+                </div>
+
+                <div class="case-card">
+                    <div class="case-header">
+                        <div class="case-avatar">👱</div>
+                        <div class="case-name">曾小贤</div>
+                    </div>
+                    <div class="case-body">
+                        <p class="case-title">电台主播的魅力蜕变</p>
+                        <p class="case-desc">"好男人就是我，我就是曾小贤"——这句口号就是子乔老师帮他设计的！从懦弱到勇敢，从犹豫到果断...</p>
+                        <div class="case-result">✨ 成功追到胡一菲，事业爱情双丰收！</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 咨询服务 -->
+        <section id="pricing">
+            <h2 class="section-title">咨询服务</h2>
+            <div class="pricing">
+                <div class="price-card">
+                    <div class="price-name">入门版</div>
+                    <div class="price-amount">¥999<span>/次</span></div>
+                    <ul class="price-features">
+                        <li>1对1情感咨询（30分钟）</li>
+                        <li>《泡妞入门手册》电子版</li>
+                        <li>子乔金句合集</li>
+                        <li>微信答疑（7天）</li>
+                    </ul>
+                    <a href="#contact" class="btn-gold">立即预约</a>
+                </div>
+
+                <div class="price-card featured">
+                    <div class="price-badge">🔥 最受欢迎</div>
+                    <div class="price-name">进阶版</div>
+                    <div class="price-amount">¥3999<span>/月</span></div>
+                    <ul class="price-features">
+                        <li>1对1深度辅导（每周1次）</li>
+                        <li>《泡妞三十六计》全套</li>
+                        <li>形象改造建议</li>
+                        <li>实战约会陪练</li>
+                        <li>24小时微信答疑</li>
+                        <li>子乔老师亲自把关</li>
+                    </ul>
+                    <a href="#contact" class="btn-gold">立即预约</a>
+                </div>
+
+                <div class="price-card">
+                    <div class="price-name">至尊VIP</div>
+                    <div class="price-amount">¥9999<span>/季度</span></div>
+                    <ul class="price-features">
+                        <li>无限次1对1咨询</li>
+                        <li>全套课程资料</li>
+                        <li>私人定制追女方案</li>
+                        <li>线下实战训练营</li>
+                        <li>终身微信答疑</li>
+                        <li>子乔老师私人电话</li>
+                        <li>保证脱单承诺！</li>
+                    </ul>
+                    <a href="#contact" class="btn-gold">立即预约</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系方式 -->
+        <section id="contact" class="contact">
+            <h2 class="contact-title">立即开启你的蜕变之旅</h2>
+            <p class="contact-slogan">"不要等到明天，因为明天永远不会来！"</p>
+            
+            <div class="contact-methods">
+                <div class="contact-item">
+                    <span>📱</span>
+                    <span>138-8888-8888</span>
+                </div>
+                <div class="contact-item">
+                    <span>💬</span>
+                    <span>微信：LZQ_Success</span>
+                </div>
+                <div class="contact-item">
+                    <span>📧</span>
+                    <span>lzq@success.com</span>
+                </div>
+            </div>
+
+            <a href="javascript:alert('恭喜！你已迈出成功的第一步！请添加微信：LZQ_Success')" class="btn-gold" style="font-size: 1.5rem; padding: 20px 60px;">
+                🚀 立即预约免费咨询
+            </a>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <p class="footer-slogan">"人生就像一场戏，因为有缘才相聚，为了小事发脾气，回头想想又何必。"</p>
+        <p class="copyright">© 2026 吕子乔励志师 · 版权所有 · 爱情公寓出品</p>
+        <div class="disclaimer">
+            ⚠️ 免责声明：本网站纯属娱乐，所有内容均为虚构。子乔老师的"成功学"仅供娱乐参考，请勿当真。真正的爱情需要真诚与尊重，而非套路与技巧。
+        </div>
+    </footer>
+
+    <script>
+        // 生成星星背景
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
