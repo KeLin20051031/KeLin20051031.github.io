@@ -1,898 +1,2336 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhu Kelin — Architect of Intelligence</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg: #050505;
-            --fg: #f0ece2;
-            --muted: #6b6560;
-            --accent: #c9a84c;
-            --accent2: #e8d5a3;
-            --card: rgba(255,255,255,0.03);
-            --border: rgba(201,168,76,0.15);
-            --glow: rgba(201,168,76,0.08);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) var(--bg);
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--fg);
-            overflow-x: hidden;
-            cursor: default;
-        }
-
-        /* Grain overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        /* Custom cursor glow */
-        .cursor-glow {
-            position: fixed;
-            width: 400px;
-            height: 400px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 24px 48px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            backdrop-filter: blur(20px);
-            background: rgba(5,5,5,0.6);
-            border-bottom: 1px solid rgba(201,168,76,0.08);
-        }
-
-        .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 36px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--muted);
-            text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            font-weight: 500;
-        }
-
-        .nav-links a:hover { color: var(--accent); }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 24px 80px;
-            position: relative;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 8px 20px;
-            border-radius: 100px;
-            font-size: 12px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 40px;
-            animation: fadeInDown 1s ease 0.2s both;
-        }
-
-        .hero-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #4ade80;
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 900;
-            line-height: 1.05;
-            margin-bottom: 24px;
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        .hero h1 .accent { color: var(--accent); }
-
-        .hero h1 .outline {
-            -webkit-text-stroke: 1.5px var(--fg);
-            color: transparent;
-        }
-
-        .hero-sub {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            color: var(--muted);
-            max-width: 600px;
-            line-height: 1.8;
-            margin-bottom: 48px;
-            animation: fadeInUp 1s ease 0.6s both;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            animation: fadeInUp 1s ease 0.8s both;
-        }
-
-        .btn-primary {
-            padding: 16px 40px;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s;
-            text-decoration: none;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 60px rgba(201,168,76,0.3);
-        }
-
-        .btn-ghost {
-            padding: 16px 40px;
-            background: transparent;
-            color: var(--fg);
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            font-size: 14px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s;
-            text-decoration: none;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        /* Scroll indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            animation: fadeInUp 1s ease 1.2s both;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(to bottom, var(--accent), transparent);
-            animation: scrollPulse 2s infinite;
-        }
-
-        @keyframes scrollPulse {
-            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
-            50% { opacity: 1; transform: scaleY(1); }
-        }
-
-        /* Section common */
-        section {
-            padding: 120px 48px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-label {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 60px;
-            line-height: 1.2;
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-
-        .stat-cell {
-            background: var(--bg);
-            padding: 48px 32px;
-            text-align: center;
-            transition: background 0.4s;
-        }
-
-        .stat-cell:hover { background: var(--card); }
-
-        .stat-value {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--accent);
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-desc {
-            font-size: 13px;
-            color: var(--muted);
-            letter-spacing: 1px;
-        }
-
-        /* Experience Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 40px;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background: linear-gradient(to bottom, var(--accent), transparent);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 60px;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -44px;
-            top: 8px;
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 20px rgba(201,168,76,0.4);
-        }
-
-        .timeline-year {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: var(--accent);
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .timeline-role {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .timeline-company {
-            color: var(--accent2);
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .timeline-desc {
-            color: var(--muted);
-            line-height: 1.7;
-            font-size: 15px;
-        }
-
-        /* Projects */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .project-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 40px;
-            transition: all 0.5s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .project-card:hover::before { opacity: 1; }
-
-        .project-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(201,168,76,0.3);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-        }
-
-        .project-icon {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .project-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .project-desc {
-            color: var(--muted);
-            line-height: 1.7;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .project-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            padding: 4px 12px;
-            border: 1px solid var(--border);
-            border-radius: 100px;
-            color: var(--accent);
-            letter-spacing: 1px;
-        }
-
-        /* Skills */
-        .skills-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .skill-row {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .skill-name {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
-            letter-spacing: 1px;
-            color: var(--muted);
-            width: 180px;
-            flex-shrink: 0;
-        }
-
-        .skill-bar-bg {
-            flex: 1;
-            height: 3px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .skill-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--accent2));
-            border-radius: 10px;
-            width: 0;
-            transition: width 1.5s ease;
-        }
-
-        .skill-bar.animate { width: var(--w); }
-
-        .skill-level {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-            color: var(--accent);
-            width: 40px;
-            text-align: right;
-        }
-
-        /* Testimonials */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-        }
-
-        .testimonial-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 32px;
-            transition: all 0.4s;
-        }
-
-        .testimonial-card:hover {
-            border-color: rgba(201,168,76,0.3);
-        }
-
-        .testimonial-quote {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            margin-bottom: 24px;
-            font-style: italic;
-            color: var(--fg);
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .testimonial-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--bg);
-        }
-
-        .testimonial-info {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .testimonial-role {
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        /* Contact */
-        .contact-section {
-            text-align: center;
-            padding: 120px 48px;
-        }
-
-        .contact-section .section-title {
-            margin-bottom: 24px;
-        }
-
-        .contact-sub {
-            color: var(--muted);
-            font-size: 16px;
-            margin-bottom: 48px;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-        }
-
-        .contact-link {
-            width: 56px;
-            height: 56px;
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 20px;
-            transition: all 0.4s;
-        }
-
-        .contact-link:hover {
-            border-color: var(--accent);
-            background: var(--glow);
-            transform: translateY(-3px);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 48px;
-            border-top: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 12px;
-            letter-spacing: 2px;
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            nav { padding: 16px 24px; }
-            .nav-links { display: none; }
-            section { padding: 80px 24px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .projects-grid { grid-template-columns: 1fr; }
-            .testimonials-grid { grid-template-columns: 1fr; }
-            .skill-name { width: 120px; font-size: 11px; }
-        }
-
-        @media (max-width: 600px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .hero-cta { flex-direction: column; align-items: center; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KELIN - 赛博朋克文件管理系统</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.min.js"></script>
+<style>
+/* ==================== 全局重置与基础样式 ==================== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-card: rgba(18, 18, 30, 0.85);
+  --neon-cyan: #00f0ff;
+  --neon-purple: #b000ff;
+  --neon-pink: #ff00aa;
+  --neon-green: #00ff88;
+  --neon-yellow: #ffee00;
+  --text-primary: #e0e0f0;
+  --text-secondary: #8888aa;
+  --text-muted: #555577;
+  --border-color: rgba(0, 240, 255, 0.15);
+  --glow-cyan: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 30px rgba(0, 240, 255, 0.2);
+  --glow-purple: 0 0 10px rgba(176, 0, 255, 0.5), 0 0 30px rgba(176, 0, 255, 0.2);
+  --glass-bg: rgba(10, 10, 20, 0.7);
+  --glass-border: rgba(0, 240, 255, 0.1);
+}
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Rajdhani', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6 { font-family: 'Orbitron', sans-serif; }
+a { color: var(--neon-cyan); text-decoration: none; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0, 240, 255, 0.5); }
+input, textarea, select, button { font-family: 'Rajdhani', sans-serif; }
+
+/* ==================== 粒子画布 ==================== */
+#particle-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+}
+
+/* ==================== 页面容器 ==================== */
+.page { display: none; position: relative; z-index: 1; min-height: 100vh; }
+.page.active { display: block; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ==================== 封页 ==================== */
+#landing-page {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: 100vh; text-align: center; padding: 2rem;
+}
+.landing-content { position: relative; z-index: 2; max-width: 800px; }
+.landing-title {
+  font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; letter-spacing: 0.3em;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 20px rgba(0,240,255,0.8), 0 0 60px rgba(0,240,255,0.4), 0 0 100px rgba(0,240,255,0.2);
+  animation: neonPulse 3s ease-in-out infinite;
+  margin-bottom: 0.5rem;
+}
+@keyframes neonPulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(0,240,255,0.8), 0 0 60px rgba(0,240,255,0.4), 0 0 100px rgba(0,240,255,0.2); }
+  50% { text-shadow: 0 0 30px rgba(0,240,255,1), 0 0 80px rgba(0,240,255,0.6), 0 0 120px rgba(0,240,255,0.3), 0 0 160px rgba(176,0,255,0.2); }
+}
+.landing-subtitle {
+  font-size: 1.1rem; color: var(--neon-purple); margin-bottom: 2rem;
+  font-weight: 600; letter-spacing: 0.1em;
+  text-shadow: 0 0 10px rgba(176,0,255,0.5);
+}
+.landing-legend {
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 12px; padding: 2rem; margin: 1.5rem 0;
+  backdrop-filter: blur(10px); text-align: left;
+}
+.landing-legend h3 {
+  color: var(--neon-cyan); font-size: 1rem; margin-bottom: 1rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+}
+.legend-item {
+  padding: 0.5rem 0; border-bottom: 1px solid rgba(0,240,255,0.05);
+  color: var(--text-secondary); font-size: 0.95rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.legend-item:last-child { border-bottom: none; }
+.legend-item::before {
+  content: '▸'; color: var(--neon-cyan); font-weight: bold;
+}
+.landing-disclaimer {
+  font-size: 0.8rem; color: var(--text-muted); margin-top: 1.5rem;
+  font-style: italic;
+}
+.landing-buttons {
+  display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;
+}
+
+/* ==================== 按钮样式 ==================== */
+.btn {
+  padding: 0.7rem 2rem; border: 1px solid var(--neon-cyan);
+  background: transparent; color: var(--neon-cyan);
+  font-family: 'Orbitron', sans-serif; font-size: 0.85rem;
+  letter-spacing: 0.1em; cursor: pointer; border-radius: 4px;
+  transition: all 0.3s ease; position: relative; overflow: hidden;
+  text-transform: uppercase;
+}
+.btn:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: var(--glow-cyan);
+  transform: translateY(-2px);
+}
+.btn:active { transform: translateY(0); }
+.btn-purple {
+  border-color: var(--neon-purple); color: var(--neon-purple);
+}
+.btn-purple:hover {
+  background: rgba(176, 0, 255, 0.1);
+  box-shadow: var(--glow-purple);
+}
+.btn-green { border-color: var(--neon-green); color: var(--neon-green); }
+.btn-green:hover { background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 10px rgba(0,255,136,0.5); }
+.btn-red { border-color: #ff4444; color: #ff4444; }
+.btn-red:hover { background: rgba(255, 68, 68, 0.1); box-shadow: 0 0 10px rgba(255,68,68,0.5); }
+.btn-yellow { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+.btn-yellow:hover { background: rgba(255,238,0,0.1); box-shadow: 0 0 10px rgba(255,238,0,0.5); }
+.btn-sm { padding: 0.4rem 1rem; font-size: 0.75rem; }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* ==================== 模态框 ==================== */
+.modal-overlay {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7); z-index: 1000;
+  justify-content: center; align-items: center;
+  backdrop-filter: blur(5px);
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
+.modal {
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  border-radius: 12px; padding: 2rem; width: 90%; max-width: 440px;
+  position: relative; box-shadow: 0 0 30px rgba(0,240,255,0.1);
+  animation: modalSlideIn 0.3s ease;
+}
+@keyframes modalSlideIn { from { opacity: 0; transform: translateY(-20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.modal-close {
+  position: absolute; top: 1rem; right: 1rem; background: none; border: none;
+  color: var(--text-muted); font-size: 1.5rem; cursor: pointer;
+  transition: color 0.3s;
+}
+.modal-close:hover { color: var(--neon-cyan); }
+.modal h2 {
+  font-size: 1.3rem; color: var(--neon-cyan); margin-bottom: 1.5rem;
+  letter-spacing: 0.1em; text-align: center;
+}
+
+/* ==================== 表单样式 ==================== */
+.form-group { margin-bottom: 1.2rem; }
+.form-group label {
+  display: block; font-size: 0.85rem; color: var(--text-secondary);
+  margin-bottom: 0.4rem; letter-spacing: 0.05em;
+}
+.form-input {
+  width: 100%; padding: 0.7rem 1rem; background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border-color); border-radius: 6px;
+  color: var(--text-primary); font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-input:focus {
+  outline: none; border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0,240,255,0.2);
+}
+.form-input::placeholder { color: var(--text-muted); }
+textarea.form-input { resize: vertical; min-height: 80px; }
+.radio-group { display: flex; gap: 1.5rem; margin-bottom: 0.5rem; }
+.radio-label {
+  display: flex; align-items: center; gap: 0.4rem; cursor: pointer;
+  color: var(--text-secondary); font-size: 0.9rem;
+}
+.radio-label input[type="radio"] {
+  accent-color: var(--neon-cyan); width: 16px; height: 16px;
+}
+
+/* ==================== Toast通知 ==================== */
+.toast-container {
+  position: fixed; top: 1rem; right: 1rem; z-index: 2000;
+  display: flex; flex-direction: column; gap: 0.5rem;
+}
+.toast {
+  padding: 0.8rem 1.5rem; border-radius: 8px; font-size: 0.9rem;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+  max-width: 360px; word-break: break-word;
+  border: 1px solid; backdrop-filter: blur(10px);
+}
+.toast-success { background: rgba(0,255,136,0.1); border-color: var(--neon-green); color: var(--neon-green); }
+.toast-error { background: rgba(255,68,68,0.1); border-color: #ff4444; color: #ff4444; }
+.toast-info { background: rgba(0,240,255,0.1); border-color: var(--neon-cyan); color: var(--neon-cyan); }
+.toast-warning { background: rgba(255,238,0,0.1); border-color: var(--neon-yellow); color: var(--neon-yellow); }
+@keyframes toastIn { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(100px); } }
+
+/* ==================== 导航栏 ==================== */
+.navbar {
+  background: var(--glass-bg); border-bottom: 1px solid var(--glass-border);
+  padding: 0.8rem 1.5rem; display: flex; align-items: center;
+  justify-content: space-between; backdrop-filter: blur(10px);
+  position: sticky; top: 0; z-index: 100;
+}
+.navbar-title {
+  font-family: 'Orbitron', sans-serif; font-size: 1.1rem;
+  color: var(--neon-cyan); letter-spacing: 0.1em;
+}
+.navbar-user {
+  display: flex; align-items: center; gap: 1rem; font-size: 0.9rem;
+}
+.admin-badge {
+  background: rgba(176,0,255,0.2); border: 1px solid var(--neon-purple);
+  color: var(--neon-purple); padding: 0.2rem 0.6rem; border-radius: 4px;
+  font-size: 0.75rem; font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* ==================== Tab导航 ==================== */
+.tab-nav {
+  display: flex; gap: 0; border-bottom: 1px solid var(--glass-border);
+  background: var(--glass-bg); backdrop-filter: blur(10px);
+  overflow-x: auto;
+}
+.tab-btn {
+  padding: 0.8rem 1.5rem; background: none; border: none;
+  color: var(--text-muted); font-size: 0.9rem; cursor: pointer;
+  transition: all 0.3s; white-space: nowrap;
+  font-family: 'Rajdhani', sans-serif; font-weight: 600;
+  border-bottom: 2px solid transparent;
+  letter-spacing: 0.05em;
+}
+.tab-btn:hover { color: var(--text-secondary); }
+.tab-btn.active {
+  color: var(--neon-cyan); border-bottom-color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(0,240,255,0.5);
+}
+.tab-content { display: none; padding: 1.5rem; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+
+/* ==================== 卡片容器 ==================== */
+.card {
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 12px; padding: 1.5rem; backdrop-filter: blur(10px);
+  margin-bottom: 1rem;
+}
+.card-title {
+  font-family: 'Orbitron', sans-serif; font-size: 0.9rem;
+  color: var(--neon-cyan); margin-bottom: 1rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ==================== 表格样式 ==================== */
+.data-table {
+  width: 100%; border-collapse: collapse; font-size: 0.9rem;
+}
+.data-table th {
+  background: rgba(0,240,255,0.05); color: var(--neon-cyan);
+  padding: 0.8rem 1rem; text-align: left; font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  font-family: 'Orbitron', sans-serif; font-size: 0.75rem;
+  letter-spacing: 0.08em; white-space: nowrap;
+}
+.data-table td {
+  padding: 0.7rem 1rem; border-bottom: 1px solid rgba(0,240,255,0.05);
+  color: var(--text-secondary); vertical-align: middle;
+}
+.data-table tr:hover td { background: rgba(0,240,255,0.02); }
+.table-container { overflow-x: auto; border-radius: 8px; border: 1px solid var(--glass-border); }
+
+/* ==================== 文件管理器 ==================== */
+.file-toolbar {
+  display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+  align-items: center;
+}
+.file-toolbar .search-input {
+  flex: 1; min-width: 150px; padding: 0.5rem 1rem;
+  background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+  border-radius: 6px; color: var(--text-primary); font-size: 0.85rem;
+}
+.file-toolbar .search-input:focus { outline: none; border-color: var(--neon-cyan); }
+.breadcrumb {
+  display: flex; align-items: center; gap: 0.3rem; margin-bottom: 1rem;
+  font-size: 0.9rem; flex-wrap: wrap;
+}
+.breadcrumb-item {
+  color: var(--text-muted); cursor: pointer; transition: color 0.3s;
+  padding: 0.2rem 0.4rem; border-radius: 4px;
+}
+.breadcrumb-item:hover { color: var(--neon-cyan); background: rgba(0,240,255,0.05); }
+.breadcrumb-item.current { color: var(--neon-cyan); cursor: default; }
+.breadcrumb-sep { color: var(--text-muted); }
+.file-list { border: 1px solid var(--glass-border); border-radius: 8px; overflow: hidden; }
+.file-item {
+  display: flex; align-items: center; padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(0,240,255,0.05);
+  cursor: pointer; transition: background 0.2s; gap: 0.8rem;
+}
+.file-item:hover { background: rgba(0,240,255,0.03); }
+.file-item.selected { background: rgba(0,240,255,0.08); border-left: 3px solid var(--neon-cyan); }
+.file-item-header {
+  display: flex; align-items: center; padding: 0.6rem 1rem;
+  background: rgba(0,240,255,0.03); font-size: 0.8rem;
+  color: var(--text-muted); font-weight: 600; gap: 0.8rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.file-icon { font-size: 1.3rem; width: 2rem; text-align: center; flex-shrink: 0; }
+.file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-size { width: 80px; text-align: right; color: var(--text-muted); font-size: 0.85rem; flex-shrink: 0; }
+.file-uploader { width: 120px; color: var(--text-muted); font-size: 0.85rem; flex-shrink: 0; }
+.file-date { width: 150px; color: var(--text-muted); font-size: 0.85rem; flex-shrink: 0; }
+.file-checkbox { width: 20px; flex-shrink: 0; }
+.file-checkbox input[type="checkbox"] { accent-color: var(--neon-cyan); width: 16px; height: 16px; cursor: pointer; }
+.file-empty {
+  padding: 3rem; text-align: center; color: var(--text-muted); font-size: 0.95rem;
+}
+.status-bar {
+  margin-top: 1rem; padding: 0.6rem 1rem;
+  background: rgba(0,240,255,0.03); border: 1px solid var(--glass-border);
+  border-radius: 6px; font-size: 0.85rem; color: var(--text-muted);
+  display: flex; justify-content: space-between;
+}
+
+/* ==================== 状态标签 ==================== */
+.status-badge {
+  display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px;
+  font-size: 0.8rem; font-weight: 600;
+}
+.status-pending { background: rgba(255,238,0,0.15); color: var(--neon-yellow); border: 1px solid rgba(255,238,0,0.3); }
+.status-approved { background: rgba(0,255,136,0.15); color: var(--neon-green); border: 1px solid rgba(0,255,136,0.3); }
+.status-rejected { background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid rgba(255,68,68,0.3); }
+
+/* ==================== 统计卡片 ==================== */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 10px; padding: 1.2rem; text-align: center;
+  backdrop-filter: blur(10px); transition: border-color 0.3s;
+}
+.stat-card:hover { border-color: var(--neon-cyan); }
+.stat-value {
+  font-family: 'Orbitron', sans-serif; font-size: 1.8rem;
+  color: var(--neon-cyan); font-weight: 700;
+}
+.stat-label {
+  font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;
+  letter-spacing: 0.05em;
+}
+
+/* ==================== 移动文件模态框 ==================== */
+.folder-tree { max-height: 300px; overflow-y: auto; }
+.folder-tree-item {
+  padding: 0.5rem 0.8rem; cursor: pointer; display: flex;
+  align-items: center; gap: 0.5rem; transition: background 0.2s;
+  border-radius: 4px; margin: 0.1rem 0;
+}
+.folder-tree-item:hover { background: rgba(0,240,255,0.05); }
+.folder-tree-item.selected { background: rgba(0,240,255,0.1); color: var(--neon-cyan); }
+
+/* ==================== 系统公告编辑 ==================== */
+.announcement-editor {
+  width: 100%; min-height: 120px; padding: 1rem;
+  background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+  border-radius: 8px; color: var(--text-primary); font-size: 0.95rem;
+  resize: vertical; font-family: 'Rajdhani', sans-serif;
+}
+.announcement-editor:focus { outline: none; border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,240,255,0.2); }
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+  .landing-title { letter-spacing: 0.15em; }
+  .landing-legend { padding: 1.2rem; }
+  .tab-btn { padding: 0.6rem 1rem; font-size: 0.8rem; }
+  .file-item-header { display: none; }
+  .file-item { flex-wrap: wrap; }
+  .file-size, .file-uploader, .file-date { width: auto; }
+  .file-name { flex: 1 1 100%; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .navbar { padding: 0.6rem 1rem; }
+  .modal { padding: 1.5rem; margin: 1rem; }
+  .data-table { font-size: 0.8rem; }
+  .data-table th, .data-table td { padding: 0.5rem; }
+}
+
+/* ==================== 加载动画 ==================== */
+.loading-spinner {
+  display: inline-block; width: 20px; height: 20px;
+  border: 2px solid var(--border-color); border-top-color: var(--neon-cyan);
+  border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ==================== 扫描线效果 ==================== */
+.scanline {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 2px,
+    rgba(0, 240, 255, 0.01) 2px, rgba(0, 240, 255, 0.01) 4px
+  );
+}
+
+/* ==================== 隐藏文件输入 ==================== */
+.hidden-input { display: none; }
+
+/* ==================== 秘钥显示 ==================== */
+.secret-key-display {
+  background: rgba(0,0,0,0.5); border: 1px solid var(--neon-green);
+  border-radius: 8px; padding: 1rem; text-align: center;
+  margin-top: 1rem;
+}
+.secret-key-display .key {
+  font-family: 'Orbitron', sans-serif; font-size: 1.5rem;
+  color: var(--neon-green); letter-spacing: 0.3em;
+  text-shadow: 0 0 10px rgba(0,255,136,0.5);
+}
+</style>
 </head>
 <body>
-    <div class="cursor-glow" id="cursorGlow"></div>
 
-    <nav>
-        <div class="nav-logo">Z.K.</div>
-        <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
+<!-- 扫描线效果 -->
+<div class="scanline"></div>
 
-    <section class="hero">
-        <div class="hero-badge">Open to Opportunities</div>
-        <h1>
-            <span class="accent">Zhu Kelin</span><br>
-            <span class="outline">Architect of</span><br>
-            Intelligence
-        </h1>
-        <p class="hero-sub">
-            Building the future at the intersection of artificial intelligence, distributed systems, and human-computer interaction. Former CTO. Serial founder. Dreamer.
-        </p>
-        <div class="hero-cta">
-            <a href="#projects" class="btn-primary">View My Work</a>
-            <a href="#contact" class="btn-ghost">Get in Touch</a>
+<!-- 粒子画布 -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- Toast通知容器 -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ==================== 封页 ==================== -->
+<div class="page active" id="landing-page">
+  <div class="landing-content">
+    <h1 class="landing-title">KELIN</h1>
+    <p class="landing-subtitle">// SYSTEM INITIALIZED v2.0.77</p>
+    <div class="landing-legend">
+      <h3>LEGENDARY PROFILE</h3>
+      <div class="legend-item">全栈架构师 | 量子计算先驱 | 温州医科大学首席技术官</div>
+      <div class="legend-item">曾独立开发操作系统、破解NASA防火墙（娱乐声明）</div>
+      <div class="legend-item">精通42种编程语言，包括3种外星语言</div>
+      <div class="legend-item">GitHub Stars超过宇宙中的恒星数量</div>
+      <div class="legend-item">曾单手重构整个互联网的底层协议</div>
+      <div class="legend-item">据说能在梦中直接debug，醒来代码已修复</div>
+    </div>
+    <p class="landing-disclaimer">⚠️ 以上内容纯属娱乐，如有雷同纯属巧合</p>
+    <div class="landing-buttons">
+      <button class="btn" onclick="showModal('login-modal')">登录</button>
+      <button class="btn btn-purple" onclick="showModal('register-modal')">注册</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 工作页面 ==================== -->
+<div class="page" id="workspace-page">
+  <nav class="navbar">
+    <div class="navbar-title">KELIN WORKSPACE</div>
+    <div class="navbar-user">
+      <span id="ws-username"></span>
+      <span id="ws-admin-badge" class="admin-badge" style="display:none;">ADMIN</span>
+      <button class="btn btn-sm btn-red" onclick="logout()">退出</button>
+    </div>
+  </nav>
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="ws-unlock" onclick="switchTab(this, 'workspace')">权限解锁</button>
+    <button class="tab-btn" data-tab="ws-files" onclick="switchTab(this, 'workspace')">文件管理</button>
+    <button class="tab-btn" data-tab="ws-apply" onclick="switchTab(this, 'workspace')">申请权限</button>
+    <button class="tab-btn" data-tab="ws-admin-login" onclick="switchTab(this, 'workspace')">楼主登录</button>
+  </div>
+
+  <!-- 权限解锁 -->
+  <div class="tab-content active" id="ws-unlock">
+    <div class="card" style="max-width:500px;margin:2rem auto;">
+      <div class="card-title">权限解锁</div>
+      <div class="form-group">
+        <label>昵称或手机号</label>
+        <input type="text" class="form-input" id="unlock-account" placeholder="输入昵称或手机号">
+      </div>
+      <div class="form-group">
+        <label>8位秘钥</label>
+        <input type="text" class="form-input" id="unlock-key" placeholder="输入8位数字秘钥" maxlength="8">
+      </div>
+      <button class="btn" onclick="handleUnlock()" style="width:100%;">解锁管理员权限</button>
+      <p style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted);text-align:center;">
+        解锁成功后，该账号将永久享有管理员权限
+      </p>
+    </div>
+  </div>
+
+  <!-- 文件管理 -->
+  <div class="tab-content" id="ws-files">
+    <div class="file-toolbar" id="file-toolbar" style="display:none;">
+      <button class="btn btn-sm btn-green" onclick="triggerUpload()">上传文件</button>
+      <button class="btn btn-sm" onclick="showNewFolderModal()">新建文件夹</button>
+      <button class="btn btn-sm btn-red" id="btn-delete" disabled onclick="deleteSelected()">删除</button>
+      <button class="btn btn-sm btn-yellow" id="btn-download" disabled onclick="downloadSelected()">下载</button>
+      <button class="btn btn-sm btn-purple" id="btn-move" disabled onclick="showMoveModal()">移动</button>
+    </div>
+    <div class="breadcrumb" id="file-breadcrumb"></div>
+    <div class="file-list" id="file-list">
+      <div class="file-item-header">
+        <div class="file-checkbox"></div>
+        <div class="file-icon"></div>
+        <div class="file-name" style="flex:2;">名称</div>
+        <div class="file-size">大小</div>
+        <div class="file-uploader">上传者</div>
+        <div class="file-date">上传时间</div>
+      </div>
+      <div id="file-list-body"></div>
+    </div>
+    <div class="status-bar">
+      <span id="storage-info">已用空间: 0 B / 50 GB</span>
+      <span id="file-count-info">文件数: 0</span>
+    </div>
+    <input type="file" class="hidden-input" id="file-upload-input" multiple onchange="handleFileUpload(event)">
+  </div>
+
+  <!-- 申请权限 -->
+  <div class="tab-content" id="ws-apply">
+    <div class="card" style="max-width:500px;margin:2rem auto;">
+      <div class="card-title">申请管理员权限</div>
+      <div class="form-group">
+        <label>昵称或手机号</label>
+        <input type="text" class="form-input" id="apply-account" placeholder="输入已注册的昵称或手机号">
+      </div>
+      <div class="form-group">
+        <label>邮箱</label>
+        <input type="email" class="form-input" id="apply-email" placeholder="输入邮箱地址">
+      </div>
+      <div class="form-group">
+        <label>申请理由</label>
+        <textarea class="form-input" id="apply-reason" placeholder="请说明申请管理员权限的理由"></textarea>
+      </div>
+      <button class="btn btn-purple" onclick="handleApplyPermission()" style="width:100%;">提交申请</button>
+    </div>
+  </div>
+
+  <!-- 楼主登录 -->
+  <div class="tab-content" id="ws-admin-login">
+    <div class="card" style="max-width:500px;margin:2rem auto;">
+      <div class="card-title">楼主管理入口</div>
+      <div class="form-group">
+        <label>账号</label>
+        <input type="text" class="form-input" id="admin-login-account" placeholder="输入楼主账号">
+      </div>
+      <div class="form-group">
+        <label>密码</label>
+        <input type="password" class="form-input" id="admin-login-password" placeholder="输入密码">
+      </div>
+      <button class="btn btn-green" onclick="handleAdminLogin()" style="width:100%;">进入管理后台</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 楼主管理页面 ==================== -->
+<div class="page" id="admin-page">
+  <nav class="navbar">
+    <div class="navbar-title">KELIN ADMIN PANEL</div>
+    <div class="navbar-user">
+      <span style="color:var(--neon-purple);">楼主管理后台</span>
+      <button class="btn btn-sm btn-red" onclick="logout()">退出</button>
+    </div>
+  </nav>
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="admin-users" onclick="switchTab(this, 'admin')">用户管理</button>
+    <button class="tab-btn" data-tab="admin-logs" onclick="switchTab(this, 'admin')">文件操作日志</button>
+    <button class="tab-btn" data-tab="admin-requests" onclick="switchTab(this, 'admin')">权限申请管理</button>
+    <button class="tab-btn" data-tab="admin-system" onclick="switchTab(this, 'admin')">系统信息</button>
+  </div>
+
+  <!-- 用户管理 -->
+  <div class="tab-content active" id="admin-users">
+    <div class="card">
+      <div class="card-title">注册用户列表</div>
+      <div class="form-group" style="margin-bottom:1rem;">
+        <input type="text" class="form-input" id="user-search" placeholder="搜索用户（昵称/手机号/工作单位）" oninput="loadUsers()">
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr><th>昵称</th><th>手机号</th><th>工作单位</th><th>管理员</th><th>注册时间</th></tr>
+          </thead>
+          <tbody id="users-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文件操作日志 -->
+  <div class="tab-content" id="admin-logs">
+    <div class="card">
+      <div class="card-title">文件操作日志</div>
+      <div class="form-group" style="margin-bottom:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <input type="text" class="form-input" id="log-search" placeholder="搜索操作者" oninput="loadLogs()" style="flex:1;min-width:150px;">
+        <select class="form-input" id="log-filter" onchange="loadLogs()" style="width:auto;min-width:120px;">
+          <option value="">全部操作</option>
+          <option value="upload">上传</option>
+          <option value="download">下载</option>
+          <option value="delete">删除</option>
+          <option value="move">移动</option>
+          <option value="create_folder">新建文件夹</option>
+        </select>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr><th>操作者</th><th>操作类型</th><th>文件名</th><th>详情</th><th>时间</th></tr>
+          </thead>
+          <tbody id="logs-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 权限申请管理 -->
+  <div class="tab-content" id="admin-requests">
+    <div class="card">
+      <div class="card-title">权限申请列表</div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr><th>申请人</th><th>手机号</th><th>邮箱</th><th>申请理由</th><th>状态</th><th>秘钥</th><th>申请时间</th><th>操作</th></tr>
+          </thead>
+          <tbody id="requests-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 系统信息 -->
+  <div class="tab-content" id="admin-system">
+    <div class="stats-grid" id="system-stats"></div>
+    <div class="card">
+      <div class="card-title">系统公告</div>
+      <textarea class="announcement-editor" id="announcement-editor" placeholder="在此编辑系统公告..."></textarea>
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;">
+        <button class="btn btn-sm btn-green" onclick="saveAnnouncement()">保存公告</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 登录模态框 ==================== -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('login-modal')">&times;</button>
+    <h2>SYSTEM LOGIN</h2>
+    <div class="form-group">
+      <label>昵称或手机号</label>
+      <input type="text" class="form-input" id="login-account" placeholder="输入昵称或手机号">
+    </div>
+    <div class="form-group">
+      <label>密码</label>
+      <input type="password" class="form-input" id="login-password" placeholder="输入密码">
+    </div>
+    <button class="btn" onclick="handleLogin()" style="width:100%;">登录</button>
+  </div>
+</div>
+
+<!-- ==================== 注册模态框 ==================== -->
+<div class="modal-overlay" id="register-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('register-modal')">&times;</button>
+    <h2>REGISTER</h2>
+    <div class="form-group">
+      <label>注册方式</label>
+      <div class="radio-group">
+        <label class="radio-label"><input type="radio" name="reg-type" value="username" checked onchange="toggleRegType()"> 昵称注册</label>
+        <label class="radio-label"><input type="radio" name="reg-type" value="phone" onchange="toggleRegType()"> 手机号注册</label>
+      </div>
+    </div>
+    <div class="form-group" id="reg-username-group">
+      <label>昵称</label>
+      <input type="text" class="form-input" id="reg-username" placeholder="输入昵称">
+    </div>
+    <div class="form-group" id="reg-phone-group" style="display:none;">
+      <label>手机号</label>
+      <input type="tel" class="form-input" id="reg-phone" placeholder="输入手机号">
+    </div>
+    <div class="form-group">
+      <label>密码</label>
+      <input type="password" class="form-input" id="reg-password" placeholder="输入密码">
+    </div>
+    <div class="form-group">
+      <label>确认密码</label>
+      <input type="password" class="form-input" id="reg-password2" placeholder="再次输入密码">
+    </div>
+    <div class="form-group">
+      <label>工作单位</label>
+      <input type="text" class="form-input" id="reg-workplace" placeholder="输入工作单位">
+    </div>
+    <button class="btn btn-purple" onclick="handleRegister()" style="width:100%;">注册</button>
+  </div>
+</div>
+
+<!-- ==================== 新建文件夹模态框 ==================== -->
+<div class="modal-overlay" id="newfolder-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('newfolder-modal')">&times;</button>
+    <h2>NEW FOLDER</h2>
+    <div class="form-group">
+      <label>文件夹名称</label>
+      <input type="text" class="form-input" id="newfolder-name" placeholder="输入文件夹名称">
+    </div>
+    <button class="btn" onclick="handleNewFolder()" style="width:100%;">创建</button>
+  </div>
+</div>
+
+<!-- ==================== 移动文件模态框 ==================== -->
+<div class="modal-overlay" id="move-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('move-modal')">&times;</button>
+    <h2>MOVE TO</h2>
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">选择目标文件夹</p>
+    <div class="folder-tree" id="move-folder-tree"></div>
+    <button class="btn btn-purple" onclick="handleMove()" style="width:100%;margin-top:1rem;">移动到此处</button>
+  </div>
+</div>
+
+<!-- ==================== 秘钥显示模态框 ==================== -->
+<div class="modal-overlay" id="secretkey-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('secretkey-modal')">&times;</button>
+    <h2>APPROVED</h2>
+    <p style="text-align:center;color:var(--neon-green);margin-bottom:1rem;">申请已通过，请将以下秘钥发送给用户</p>
+    <div class="secret-key-display">
+      <div class="key" id="secretkey-value"></div>
+    </div>
+    <p style="text-align:center;font-size:0.8rem;color:var(--text-muted);margin-top:1rem;">
+      请通过邮箱将此秘钥发送给申请人
+    </p>
+  </div>
+</div>
+
+<script>
+// ==================== Supabase 配置 ====================
+const SUPABASE_URL = 'https://tmmfcgljgpxgpzaogwvj.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtbWZjZ2xqZ3B4Z3B6YW9nd3ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4OTY4MDAsImV4cCI6MjA5NTQ3MjgwMH0.5T8C0Sv0aw8V8VJ0W8V8V8V8V8V8V8V8V8V8V8V8V8';
+const STORAGE_BUCKET = 'kelin-files';
+
+// 初始化 Supabase 客户端
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ==================== 全局变量 ====================
+let currentUser = null;           // 当前登录用户
+let currentFolderId = null;       // 当前浏览的文件夹ID（null=根目录）
+let folderPath = [];              // 面包屑路径
+let selectedFiles = new Set();    // 选中的文件ID集合
+let moveTargetFolderId = null;    // 移动目标文件夹ID
+
+// ==================== 工具函数 ====================
+
+// 显示Toast通知
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 3000);
+}
+
+// 显示模态框
+function showModal(id) {
+  document.getElementById(id).classList.add('active');
+}
+
+// 隐藏模态框
+function hideModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+// 格式化文件大小
+function formatSize(bytes) {
+  if (bytes === 0 || bytes == null) return '-';
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let i = 0;
+  let size = bytes;
+  while (size >= 1024 && i < units.length - 1) { size /= 1024; i++; }
+  return size.toFixed(i === 0 ? 0 : 1) + ' ' + units[i];
+}
+
+// 格式化日期（中文格式）
+function formatDate(date) {
+  if (!date) return '-';
+  const d = new Date(date);
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const h = String(d.getHours()).padStart(2, '0');
+  const min = String(d.getMinutes()).padStart(2, '0');
+  return `${y}年${m}月${day}日 ${h}:${min}`;
+}
+
+// 获取文件图标
+function getFileIcon(name, type) {
+  if (type === 'folder') return '📁';
+  const ext = name.split('.').pop().toLowerCase();
+  const iconMap = {
+    'pdf': '📄', 'doc': '📝', 'docx': '📝', 'xls': '📊', 'xlsx': '📊',
+    'ppt': '📽️', 'pptx': '📽️', 'txt': '📃', 'jpg': '🖼️', 'jpeg': '🖼️',
+    'png': '🖼️', 'gif': '🖼️', 'svg': '🖼️', 'mp3': '🎵', 'mp4': '🎬',
+    'avi': '🎬', 'mkv': '🎬', 'zip': '📦', 'rar': '📦', '7z': '📦',
+    'js': '⚡', 'py': '🐍', 'java': '☕', 'html': '🌐', 'css': '🎨',
+    'json': '📋', 'xml': '📋', 'sql': '🗃️', 'exe': '⚙️', 'apk': '📱',
+  };
+  return iconMap[ext] || '📎';
+}
+
+// 生成8位随机数字秘钥
+function generateSecretKey() {
+  let key = '';
+  for (let i = 0; i < 8; i++) key += Math.floor(Math.random() * 10);
+  return key;
+}
+
+// 切换页面
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+}
+
+// 切换Tab
+function switchTab(btn, page) {
+  const tabId = btn.dataset.tab;
+  // 切换按钮状态
+  btn.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // 切换内容
+  const prefix = page === 'workspace' ? 'ws' : 'admin';
+  document.querySelectorAll(`#${page === 'workspace' ? 'workspace-page' : 'admin-page'} .tab-content`).forEach(tc => tc.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  // 切换到文件管理时刷新文件列表
+  if (tabId === 'ws-files') loadFiles();
+  // 切换到管理页面各Tab时刷新数据
+  if (tabId === 'admin-users') loadUsers();
+  if (tabId === 'admin-logs') loadLogs();
+  if (tabId === 'admin-requests') loadRequests();
+  if (tabId === 'admin-system') loadSystemInfo();
+}
+
+// 注册方式切换
+function toggleRegType() {
+  const type = document.querySelector('input[name="reg-type"]:checked').value;
+  document.getElementById('reg-username-group').style.display = type === 'username' ? 'block' : 'none';
+  document.getElementById('reg-phone-group').style.display = type === 'phone' ? 'block' : 'none';
+}
+
+// ==================== 用户认证（Supabase Auth）====================
+
+// 初始化楼主账号
+async function initAdminAccount() {
+  try {
+    // 检查是否已存在楼主账号
+    const { data: existingUsers, error: checkError } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('username', '2429040001')
+      .limit(1);
+    
+    if (checkError) throw checkError;
+    
+    if (!existingUsers || existingUsers.length === 0) {
+      // 创建楼主Auth用户
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: 'admin@kelin.local',
+        password: 'zkl20051031',
+        options: {
+          data: {
+            username: '2429040001',
+            is_admin: true
+          }
+        }
+      });
+      
+      if (authError && !authError.message.includes('already registered')) {
+        console.log('楼主Auth账号创建结果:', authError?.message || '成功');
+      }
+      
+      // 创建或更新用户资料
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .upsert({
+          id: authData?.user?.id,
+          username: '2429040001',
+          phone: null,
+          workplace: '温州医科大学',
+          is_admin: true,
+          secret_key: null,
+          created_at: new Date().toISOString()
+        }, { onConflict: 'username' });
+      
+      if (profileError) throw profileError;
+      console.log('楼主账号已初始化');
+    }
+  } catch (err) {
+    console.error('初始化楼主账号失败:', err);
+  }
+}
+
+// 登录处理
+async function handleLogin() {
+  const account = document.getElementById('login-account').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!account || !password) { showToast('请填写完整信息', 'warning'); return; }
+
+  try {
+    // 先通过用户名/手机号查找用户资料获取邮箱
+    let email = null;
+    let userProfile = null;
+    
+    // 尝试用昵称查找
+    const { data: byUsername, error: uError } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('username', account)
+      .limit(1);
+    
+    if (uError) throw uError;
+    
+    if (byUsername && byUsername.length > 0) {
+      userProfile = byUsername[0];
+      email = userProfile.email || `user_${userProfile.id}@kelin.local`;
+    } else {
+      // 尝试用手机号查找
+      const { data: byPhone, error: pError } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('phone', account)
+        .limit(1);
+      
+      if (pError) throw pError;
+      
+      if (byPhone && byPhone.length > 0) {
+        userProfile = byPhone[0];
+        email = userProfile.email || `user_${userProfile.id}@kelin.local`;
+      }
+    }
+    
+    if (!userProfile) {
+      showToast('用户不存在', 'error');
+      return;
+    }
+    
+    // 使用邮箱登录
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+    
+    if (authError) {
+      showToast('密码错误', 'error');
+      return;
+    }
+    
+    // 登录成功
+    currentUser = {
+      ...userProfile,
+      auth_id: authData.user.id
+    };
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+    hideModal('login-modal');
+    showToast('登录成功', 'success');
+
+    // 清空表单
+    document.getElementById('login-account').value = '';
+    document.getElementById('login-password').value = '';
+
+    // 根据用户类型跳转
+    if (userProfile.username === '2429040001') {
+      enterAdminPage();
+    } else {
+      enterWorkspace();
+    }
+  } catch (err) {
+    showToast('登录失败: ' + err.message, 'error');
+  }
+}
+
+// 注册处理
+async function handleRegister() {
+  const regType = document.querySelector('input[name="reg-type"]:checked').value;
+  const username = document.getElementById('reg-username').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const password2 = document.getElementById('reg-password2').value;
+  const workplace = document.getElementById('reg-workplace').value.trim();
+
+  // 验证
+  if (regType === 'username' && !username) { showToast('请输入昵称', 'warning'); return; }
+  if (regType === 'phone' && !phone) { showToast('请输入手机号', 'warning'); return; }
+  if (!password) { showToast('请输入密码', 'warning'); return; }
+  if (password !== password2) { showToast('两次密码不一致', 'warning'); return; }
+  if (!workplace) { showToast('请输入工作单位', 'warning'); return; }
+
+  // 验证工作单位
+  const validWorkplaces = ['温州医科大学', '温医大', 'win1'];
+  const workplaceLower = workplace.toLowerCase();
+  if (!validWorkplaces.some(w => w.toLowerCase() === workplaceLower)) {
+    showToast('工作单位必须是：温州医科大学、温医大或win1', 'error');
+    return;
+  }
+
+  try {
+    // 检查昵称是否已存在
+    if (regType === 'username') {
+      const { data: existingUser, error: checkError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('username', username)
+        .limit(1);
+      
+      if (checkError) throw checkError;
+      if (existingUser && existingUser.length > 0) {
+        showToast('该昵称已被注册', 'error');
+        return;
+      }
+    }
+    
+    // 检查手机号是否已存在
+    if (regType === 'phone') {
+      const { data: existingPhone, error: checkError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('phone', phone)
+        .limit(1);
+      
+      if (checkError) throw checkError;
+      if (existingPhone && existingPhone.length > 0) {
+        showToast('该手机号已被注册', 'error');
+        return;
+      }
+    }
+
+    // 生成唯一邮箱用于Auth
+    const timestamp = Date.now();
+    const email = `user_${timestamp}@kelin.local`;
+    
+    // 创建Auth用户
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: regType === 'username' ? username : phone,
+          is_admin: false
+        }
+      }
+    });
+    
+    if (authError) throw authError;
+
+    // 创建用户资料
+    const { data: profileData, error: profileError } = await supabase
+      .from('user_profiles')
+      .insert({
+        id: authData.user.id,
+        username: regType === 'username' ? username : null,
+        phone: regType === 'phone' ? phone : null,
+        email: email,
+        workplace: workplace,
+        is_admin: false,
+        secret_key: null,
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+    
+    if (profileError) throw profileError;
+
+    currentUser = {
+      ...profileData,
+      auth_id: authData.user.id
+    };
+    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+    hideModal('register-modal');
+    showToast('注册成功，已自动登录', 'success');
+
+    // 清空表单
+    document.getElementById('reg-username').value = '';
+    document.getElementById('reg-phone').value = '';
+    document.getElementById('reg-password').value = '';
+    document.getElementById('reg-password2').value = '';
+    document.getElementById('reg-workplace').value = '';
+
+    enterWorkspace();
+  } catch (err) {
+    showToast('注册失败: ' + err.message, 'error');
+  }
+}
+
+// 退出登录
+async function logout() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  sessionStorage.removeItem('currentUser');
+  currentFolderId = null;
+  folderPath = [];
+  selectedFiles.clear();
+  showPage('landing-page');
+  showToast('已退出登录', 'info');
+}
+
+// 进入工作页面
+function enterWorkspace() {
+  showPage('workspace-page');
+  document.getElementById('ws-username').textContent = currentUser.username || currentUser.phone;
+  if (currentUser.is_admin) {
+    document.getElementById('ws-admin-badge').style.display = 'inline-block';
+  } else {
+    document.getElementById('ws-admin-badge').style.display = 'none';
+  }
+  // 显示/隐藏文件管理工具栏
+  document.getElementById('file-toolbar').style.display = currentUser.is_admin ? 'flex' : 'none';
+  // 重置到根目录
+  currentFolderId = null;
+  folderPath = [];
+  selectedFiles.clear();
+  // 切换到第一个Tab
+  const firstTab = document.querySelector('#workspace-page .tab-btn');
+  switchTab(firstTab, 'workspace');
+}
+
+// 进入楼主管理页面
+function enterAdminPage() {
+  showPage('admin-page');
+  // 切换到第一个Tab
+  const firstTab = document.querySelector('#admin-page .tab-btn');
+  switchTab(firstTab, 'admin');
+}
+
+// 楼主登录
+async function handleAdminLogin() {
+  const account = document.getElementById('admin-login-account').value.trim();
+  const password = document.getElementById('admin-login-password').value;
+  if (!account || !password) { showToast('请填写完整信息', 'warning'); return; }
+
+  if (account === '2429040001' && password === 'zkl20051031') {
+    try {
+      // 查找楼主用户资料
+      const { data: adminUser, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('username', '2429040001')
+        .limit(1)
+        .single();
+      
+      if (error || !adminUser) {
+        showToast('楼主账号未初始化', 'error');
+        return;
+      }
+      
+      // 登录Auth
+      const email = adminUser.email || `user_${adminUser.id}@kelin.local`;
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+      
+      if (authError) {
+        showToast('登录失败: ' + authError.message, 'error');
+        return;
+      }
+      
+      currentUser = {
+        ...adminUser,
+        auth_id: authData.user.id
+      };
+      sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+      document.getElementById('admin-login-account').value = '';
+      document.getElementById('admin-login-password').value = '';
+      showToast('楼主登录成功', 'success');
+      enterAdminPage();
+    } catch (err) {
+      showToast('登录失败: ' + err.message, 'error');
+    }
+  } else {
+    showToast('账号或密码错误', 'error');
+  }
+}
+
+// ==================== 权限解锁 ====================
+
+async function handleUnlock() {
+  const account = document.getElementById('unlock-account').value.trim();
+  const key = document.getElementById('unlock-key').value.trim();
+  if (!account || !key) { showToast('请填写完整信息', 'warning'); return; }
+  if (key.length !== 8 || !/^\d{8}$/.test(key)) { showToast('秘钥必须为8位数字', 'warning'); return; }
+
+  try {
+    // 查找用户
+    let userProfile = null;
+    
+    const { data: byUsername, error: uError } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('username', account)
+      .limit(1);
+    
+    if (uError) throw uError;
+    
+    if (byUsername && byUsername.length > 0) {
+      userProfile = byUsername[0];
+    } else {
+      const { data: byPhone, error: pError } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('phone', account)
+        .limit(1);
+      
+      if (pError) throw pError;
+      
+      if (byPhone && byPhone.length > 0) {
+        userProfile = byPhone[0];
+      }
+    }
+    
+    if (!userProfile) { showToast('用户不存在', 'error'); return; }
+    if (userProfile.is_admin) { showToast('该用户已是管理员', 'info'); return; }
+
+    // 查找审批通过的申请记录且secret_key匹配
+    const { data: requests, error: rError } = await supabase
+      .from('permission_requests')
+      .select('*')
+      .eq('status', 'approved')
+      .eq('secret_key', key);
+    
+    if (rError) throw rError;
+    
+    const matchedRequest = requests.find(r =>
+      r.username === userProfile.username || 
+      r.username === userProfile.phone || 
+      r.phone === userProfile.username || 
+      r.phone === userProfile.phone
+    );
+
+    if (!matchedRequest) { showToast('秘钥不匹配或无对应的审批记录', 'error'); return; }
+
+    // 解锁：将用户设为管理员
+    const { error: updateError } = await supabase
+      .from('user_profiles')
+      .update({ 
+        is_admin: true, 
+        secret_key: key,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', userProfile.id);
+    
+    if (updateError) throw updateError;
+
+    // 记录解锁到操作日志
+    await supabase.from('operation_logs').insert({
+      username: userProfile.username || userProfile.phone,
+      action: 'admin_unlock',
+      file_name: null,
+      detail: `用户解锁管理员权限，秘钥: ${key}`,
+      created_at: new Date().toISOString()
+    });
+
+    // 如果是当前用户，更新session
+    if (currentUser && currentUser.id === userProfile.id) {
+      currentUser.is_admin = true;
+      currentUser.secret_key = key;
+      sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+      document.getElementById('ws-admin-badge').style.display = 'inline-block';
+      document.getElementById('file-toolbar').style.display = 'flex';
+    }
+
+    document.getElementById('unlock-account').value = '';
+    document.getElementById('unlock-key').value = '';
+    showToast('解锁成功！该账号已获得管理员权限', 'success');
+  } catch (err) {
+    showToast('解锁失败: ' + err.message, 'error');
+  }
+}
+
+// ==================== 申请权限 ====================
+
+async function handleApplyPermission() {
+  const account = document.getElementById('apply-account').value.trim();
+  const email = document.getElementById('apply-email').value.trim();
+  const reason = document.getElementById('apply-reason').value.trim();
+  if (!account || !email || !reason) { showToast('请填写完整信息', 'warning'); return; }
+
+  try {
+    // 验证用户已注册
+    let userProfile = null;
+    
+    const { data: byUsername, error: uError } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('username', account)
+      .limit(1);
+    
+    if (uError) throw uError;
+    
+    if (byUsername && byUsername.length > 0) {
+      userProfile = byUsername[0];
+    } else {
+      const { data: byPhone, error: pError } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('phone', account)
+        .limit(1);
+      
+      if (pError) throw pError;
+      
+      if (byPhone && byPhone.length > 0) {
+        userProfile = byPhone[0];
+      }
+    }
+    
+    if (!userProfile) { showToast('该用户未注册，请先注册', 'error'); return; }
+    if (userProfile.is_admin) { showToast('该用户已是管理员，无需申请', 'info'); return; }
+
+    // 检查是否有待审核的申请
+    const { data: pendingRequests, error: checkError } = await supabase
+      .from('permission_requests')
+      .select('*')
+      .eq('status', 'pending')
+      .or(`username.eq.${userProfile.username},username.eq.${userProfile.phone}`);
+    
+    if (checkError) throw checkError;
+    
+    if (pendingRequests && pendingRequests.length > 0) {
+      showToast('您已有待审核的申请，请耐心等待', 'warning');
+      return;
+    }
+
+    // 创建申请
+    const { error: insertError } = await supabase
+      .from('permission_requests')
+      .insert({
+        username: userProfile.username || userProfile.phone,
+        phone: userProfile.phone || userProfile.username,
+        email: email,
+        reason: reason,
+        status: 'pending',
+        secret_key: null,
+        created_at: new Date().toISOString(),
+        reviewed_at: null
+      });
+    
+    if (insertError) throw insertError;
+
+    document.getElementById('apply-account').value = '';
+    document.getElementById('apply-email').value = '';
+    document.getElementById('apply-reason').value = '';
+    showToast('申请已提交，请等待楼主审核', 'success');
+  } catch (err) {
+    showToast('提交申请失败: ' + err.message, 'error');
+  }
+}
+
+// ==================== 文件管理 ====================
+
+// 加载文件列表
+async function loadFiles() {
+  try {
+    // 获取当前文件夹的文件和文件夹
+    const { data: files, error } = await supabase
+      .from('files')
+      .select('*')
+      .eq('parent_id', currentFolderId)
+      .order('type', { ascending: false })  // 文件夹排在前面
+      .order('name', { ascending: true });
+    
+    if (error) throw error;
+
+    const listBody = document.getElementById('file-list-body');
+    if (!files || files.length === 0) {
+      listBody.innerHTML = '<div class="file-empty">此文件夹为空</div>';
+    } else {
+      listBody.innerHTML = files.map(f => `
+        <div class="file-item ${selectedFiles.has(f.id) ? 'selected' : ''}" data-id="${f.id}" data-type="${f.type}" onclick="toggleFileSelect('${f.id}')" ondblclick="handleFileDblClick('${f.id}', '${f.type}', '${(f.name || '').replace(/'/g, "\\'")}')">
+          <div class="file-checkbox"><input type="checkbox" ${selectedFiles.has(f.id) ? 'checked' : ''} onclick="event.stopPropagation();toggleFileSelect('${f.id}')"></div>
+          <div class="file-icon">${getFileIcon(f.name, f.type)}</div>
+          <div class="file-name" title="${f.name}">${f.name}</div>
+          <div class="file-size">${f.type === 'folder' ? '-' : formatSize(f.size)}</div>
+          <div class="file-uploader">${f.uploaded_by || '-'}</div>
+          <div class="file-date">${formatDate(f.created_at)}</div>
         </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
+      `).join('');
+    }
 
-    <section id="about">
-        <div class="section-label">// 01 — About</div>
-        <div class="section-title">Numbers That<br>Speak Volumes</div>
-        <div class="stats-grid">
-            <div class="stat-cell">
-                <div class="stat-value">12+</div>
-                <div class="stat-desc">Years of Experience</div>
-            </div>
-            <div class="stat-cell">
-                <div class="stat-value">3</div>
-                <div class="stat-desc">Companies Founded</div>
-            </div>
-            <div class="stat-cell">
-                <div class="stat-value">$2.4B</div>
-                <div class="stat-desc">Total Value Created</div>
-            </div>
-            <div class="stat-cell">
-                <div class="stat-value">80K+</div>
-                <div class="stat-desc">GitHub Stars</div>
-            </div>
-        </div>
-    </section>
+    // 更新面包屑
+    updateBreadcrumb();
+    // 更新存储信息
+    await updateStorageInfo();
+    // 更新按钮状态
+    updateFileButtons();
+  } catch (err) {
+    showToast('加载文件失败: ' + err.message, 'error');
+  }
+}
 
-    <section id="experience">
-        <div class="section-label">// 02 — Experience</div>
-        <div class="section-title">A Career Built on<br>Relentless Innovation</div>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-year">2023 — Present</div>
-                <div class="timeline-role">Chief Technology Officer</div>
-                <div class="timeline-company">NovaMind AI — San Francisco</div>
-                <div class="timeline-desc">Leading a team of 200+ engineers building next-generation foundation models. Architected the inference platform serving 50M+ daily requests with 99.99% uptime. Raised Series C at $1.2B valuation.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2020 — 2023</div>
-                <div class="timeline-role">Co-Founder & CTO</div>
-                <div class="timeline-company">QuantumLeap Labs — Singapore</div>
-                <div class="timeline-desc">Co-founded an AI-native fintech startup. Built the core quantitative trading engine processing $8B daily volume. Acquired by a Fortune 500 company for $340M.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2017 — 2020</div>
-                <div class="timeline-role">Staff Software Engineer</div>
-                <div class="timeline-company">Google DeepMind — London</div>
-                <div class="timeline-desc">Core contributor to AlphaFold protein structure prediction. Published 8 papers in Nature and Science. Led the distributed training infrastructure team for Gemini.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-year">2014 — 2017</div>
-                <div class="timeline-role">Founder & CEO</div>
-                <div class="timeline-company">NeuralPath Inc. — Beijing</div>
-                <div class="timeline-desc">Founded an AI education platform reaching 10M+ students across Asia. Developed adaptive learning algorithms that improved student outcomes by 47%. Sold to Tencent.</div>
-            </div>
-        </div>
-    </section>
+// 更新面包屑导航
+function updateBreadcrumb() {
+  const breadcrumb = document.getElementById('file-breadcrumb');
+  let html = `<span class="breadcrumb-item ${currentFolderId === null ? 'current' : ''}" onclick="navigateToFolder(null)">根目录</span>`;
+  for (let i = 0; i < folderPath.length; i++) {
+    const isCurrent = i === folderPath.length - 1 && currentFolderId !== null;
+    html += `<span class="breadcrumb-sep">/</span>`;
+    html += `<span class="breadcrumb-item ${isCurrent ? 'current' : ''}" onclick="navigateToFolder('${folderPath[i].id}')">${folderPath[i].name}</span>`;
+  }
+  breadcrumb.innerHTML = html;
+}
 
-    <section id="projects">
-        <div class="section-label">// 03 — Projects</div>
-        <div class="section-title">Open Source &<br>Research Highlights</div>
-        <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-icon">🧠</div>
-                <div class="project-name">NeuroFlow Engine</div>
-                <div class="project-desc">An open-source neural architecture search framework that automates model design. Used by 500+ research labs worldwide. 42K GitHub stars.</div>
-                <div class="project-tags">
-                    <span class="project-tag">Python</span>
-                    <span class="project-tag">PyTorch</span>
-                    <span class="project-tag">CUDA</span>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-icon">⚡</div>
-                <div class="project-name">ThunderDB</div>
-                <div class="project-desc">Distributed database achieving 1M+ TPS on commodity hardware. Adopted by Uber, Shopify, and Stripe for real-time analytics pipelines.</div>
-                <div class="project-tags">
-                    <span class="project-tag">Rust</span>
-                    <span class="project-tag">Distributed Systems</span>
-                    <span class="project-tag">LSM</span>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-icon">🌐</div>
-                <div class="project-name">SynthWeb</div>
-                <div class="project-desc">AI-powered web framework that generates production-ready applications from natural language descriptions. Featured on Hacker News front page 6 times.</div>
-                <div class="project-tags">
-                    <span class="project-tag">TypeScript</span>
-                    <span class="project-tag">LLM</span>
-                    <span class="project-tag">React</span>
-                </div>
-            </div>
-            <div class="project-card">
-                <div class="project-icon">🔐</div>
-                <div class="project-name">ZeroTrust Mesh</div>
-                <div class="project-desc">Decentralized identity and access management protocol. Endorsed by the Linux Foundation. Deployed across 200+ enterprise networks globally.</div>
-                <div class="project-tags">
-                    <span class="project-tag">Go</span>
-                    <span class="project-tag">Blockchain</span>
-                    <span class="project-tag">Security</span>
-                </div>
-            </div>
-        </div>
-    </section>
+// 导航到指定文件夹
+async function navigateToFolder(folderId) {
+  if (folderId === null) {
+    currentFolderId = null;
+    folderPath = [];
+  } else {
+    // 找到该文件夹在路径中的位置
+    const idx = folderPath.findIndex(f => f.id === folderId);
+    if (idx >= 0) {
+      folderPath = folderPath.slice(0, idx + 1);
+      currentFolderId = folderId;
+    } else {
+      // 如果不在路径中，获取文件夹信息并添加到路径
+      const { data: folder, error } = await supabase
+        .from('files')
+        .select('*')
+        .eq('id', folderId)
+        .single();
+      
+      if (!error && folder) {
+        folderPath.push({ id: folder.id, name: folder.name });
+        currentFolderId = folderId;
+      }
+    }
+  }
+  selectedFiles.clear();
+  loadFiles();
+}
 
-    <section>
-        <div class="section-label">// 04 — Skills</div>
-        <div class="section-title">Technical<br>Proficiency</div>
-        <div class="skills-container">
-            <div class="skill-row">
-                <div class="skill-name">Machine Learning</div>
-                <div class="skill-bar-bg"><div class="skill-bar" style="--w: 97%"></div></div>
-                <div class="skill-level">97%</div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-name">Distributed Systems</div>
-                <div class="skill-bar-bg"><div class="skill-bar" style="--w: 95%"></div></div>
-                <div class="skill-level">95%</div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-name">System Architecture</div>
-                <div class="skill-bar-bg"><div class="skill-bar" style="--w: 93%"></div></div>
-                <div class="skill-level">93%</div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-name">Rust / Go / C++</div>
-                <div class="skill-bar-bg"><div class="skill-bar" style="--w: 92%"></div></div>
-                <div class="skill-level">92%</div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-name">Cloud Native (K8s)</div>
-                <div class="skill-bar-bg"><div class="skill-bar" style="--w: 90%"></div></div>
-                <div class="skill-level">90%</div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-name">Full-Stack Web</div>
-                <div class="skill-bar-bg"><div class="skill-bar" style="--w: 88%"></div></div>
-                <div class="skill-level">88%</div>
-            </div>
-        </div>
-    </section>
+// 双击文件/文件夹
+async function handleFileDblClick(fileId, fileType, fileName) {
+  if (fileType === 'folder') {
+    // 进入文件夹
+    const { data: folder, error } = await supabase
+      .from('files')
+      .select('*')
+      .eq('id', fileId)
+      .single();
+    
+    if (error || !folder) {
+      showToast('文件夹不存在', 'error');
+      return;
+    }
+    
+    folderPath.push({ id: folder.id, name: folder.name });
+    currentFolderId = folder.id;
+    selectedFiles.clear();
+    loadFiles();
+  } else {
+    // 下载文件
+    await downloadFile(fileId);
+  }
+}
 
-    <section>
-        <div class="section-label">// 05 — Testimonials</div>
-        <div class="section-title">What Leaders<br>Are Saying</div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <div class="testimonial-quote">"Kelin is one of the most brilliant engineers I've ever worked with. His ability to translate complex research into production systems is unmatched."</div>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">D</div>
-                    <div>
-                        <div class="testimonial-info">Demis Hassabis</div>
-                        <div class="testimonial-role">CEO, Google DeepMind</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-quote">"His work on NeuroFlow revolutionized how our team approaches model development. A true visionary in the AI space."</div>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">A</div>
-                    <div>
-                        <div class="testimonial-info">Andrej Karpathy</div>
-                        <div class="testimonial-role">Former Director of AI, Tesla</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-quote">"In 20 years of venture investing, Kelin stands out as a rare combination of technical depth and entrepreneurial instinct."</div>
-                <div class="testimonial-author">
-                    <div class="testimonial-avatar">M</div>
-                    <div>
-                        <div class="testimonial-info">Mary Meeker</div>
-                        <div class="testimonial-role">General Partner, BOND Capital</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+// 切换文件选中状态
+function toggleFileSelect(fileId) {
+  if (selectedFiles.has(fileId)) {
+    selectedFiles.delete(fileId);
+  } else {
+    selectedFiles.add(fileId);
+  }
+  // 更新UI
+  document.querySelectorAll('.file-item').forEach(el => {
+    const id = el.dataset.id;
+    el.classList.toggle('selected', selectedFiles.has(id));
+    const cb = el.querySelector('input[type="checkbox"]');
+    if (cb) cb.checked = selectedFiles.has(id);
+  });
+  updateFileButtons();
+}
 
-    <section class="contact-section" id="contact">
-        <div class="section-label">// 06 — Contact</div>
-        <div class="section-title">Let's Build<br>Something Great</div>
-        <p class="contact-sub">Always open to interesting conversations, collaborations, and opportunities.</p>
-        <div class="contact-links">
-            <a href="https://github.com/KeLin20051031" class="contact-link" title="GitHub">GH</a>
-            <a href="#" class="contact-link" title="Twitter">X</a>
-            <a href="#" class="contact-link" title="LinkedIn">IN</a>
-            <a href="#" class="contact-link" title="Email">@</a>
-        </div>
-    </section>
+// 更新文件操作按钮状态
+function updateFileButtons() {
+  const hasSelection = selectedFiles.size > 0;
+  const btnDelete = document.getElementById('btn-delete');
+  const btnDownload = document.getElementById('btn-download');
+  const btnMove = document.getElementById('btn-move');
+  if (btnDelete) btnDelete.disabled = !hasSelection;
+  if (btnDownload) btnDownload.disabled = !hasSelection;
+  if (btnMove) btnMove.disabled = !hasSelection;
+}
 
-    <footer>
-        &copy; 2026 Zhu Kelin &mdash; Designed with obsession.
-    </footer>
+// 更新存储信息
+async function updateStorageInfo() {
+  try {
+    const { data: allFiles, error } = await supabase
+      .from('files')
+      .select('size, type');
+    
+    if (error) throw error;
+    
+    let totalSize = 0;
+    let fileCount = 0;
+    (allFiles || []).forEach(f => {
+      if (f.type === 'file' && f.size) { totalSize += f.size; fileCount++; }
+    });
+    
+    document.getElementById('storage-info').textContent = `已用空间: ${formatSize(totalSize)} / 50 GB`;
+    document.getElementById('file-count-info').textContent = `文件数: ${fileCount}`;
+  } catch (err) {
+    console.error('更新存储信息失败:', err);
+  }
+}
 
-    <script>
-        // Cursor glow
-        const glow = document.getElementById('cursorGlow');
-        document.addEventListener('mousemove', e => {
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
+// 触发文件上传
+function triggerUpload() {
+  document.getElementById('file-upload-input').click();
+}
+
+// 处理文件上传
+async function handleFileUpload(event) {
+  const files = event.target.files;
+  if (!files || files.length === 0) return;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    try {
+      // 生成唯一文件名
+      const timestamp = Date.now();
+      const uniqueFileName = `${timestamp}_${file.name}`;
+      const filePath = currentFolderId ? `${currentFolderId}/${uniqueFileName}` : uniqueFileName;
+      
+      // 上传到Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from(STORAGE_BUCKET)
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
         });
+      
+      if (uploadError) throw uploadError;
+      
+      // 获取公开URL
+      const { data: { publicUrl } } = supabase.storage
+        .from(STORAGE_BUCKET)
+        .getPublicUrl(filePath);
+      
+      // 保存文件记录到数据库
+      const { data: fileRecord, error: dbError } = await supabase
+        .from('files')
+        .insert({
+          name: file.name,
+          type: 'file',
+          parent_id: currentFolderId,
+          size: file.size,
+          storage_path: filePath,
+          public_url: publicUrl,
+          uploaded_by: currentUser.username || currentUser.phone,
+          created_at: new Date().toISOString()
+        })
+        .select()
+        .single();
+      
+      if (dbError) throw dbError;
+      
+      // 记录日志
+      await supabase.from('operation_logs').insert({
+        username: currentUser.username || currentUser.phone,
+        action: 'upload',
+        file_name: file.name,
+        detail: `上传文件 ${file.name} (${formatSize(file.size)})`,
+        created_at: new Date().toISOString()
+      });
+    } catch (err) {
+      showToast(`上传 ${file.name} 失败: ${err.message}`, 'error');
+    }
+  }
 
-        // Scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    // Animate skill bars
-                    entry.target.querySelectorAll('.skill-bar').forEach(bar => {
-                        bar.classList.add('animate');
-                    });
-                }
-            });
-        }, { threshold: 0.2 });
+  event.target.value = '';
+  showToast(`成功上传 ${files.length} 个文件`, 'success');
+  loadFiles();
+}
 
-        document.querySelectorAll('.timeline-item, .skills-container').forEach(el => {
-            observer.observe(el);
-        });
+// 下载文件
+async function downloadFile(fileId) {
+  try {
+    const { data: file, error } = await supabase
+      .from('files')
+      .select('*')
+      .eq('id', fileId)
+      .single();
+    
+    if (error || !file || file.type !== 'file') {
+      showToast('文件不存在', 'error');
+      return;
+    }
 
-        // Smooth reveal for sections
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, { threshold: 0.1 });
+    // 从Storage下载文件
+    const { data: blobData, error: downloadError } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .download(file.storage_path);
+    
+    if (downloadError) {
+      // 如果下载失败，尝试使用公开URL
+      if (file.public_url) {
+        const a = document.createElement('a');
+        a.href = file.public_url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      } else {
+        throw downloadError;
+      }
+    } else {
+      // 使用下载的blob创建URL
+      const url = URL.createObjectURL(blobData);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
 
-        document.querySelectorAll('section').forEach(sec => {
-            sec.style.opacity = '0';
-            sec.style.transform = 'translateY(40px)';
-            sec.style.transition = 'all 0.8s ease';
-            sectionObserver.observe(sec);
-        });
-    </script>
+    // 记录日志
+    await supabase.from('operation_logs').insert({
+      username: currentUser.username || currentUser.phone,
+      action: 'download',
+      file_name: file.name,
+      detail: `下载文件 ${file.name}`,
+      created_at: new Date().toISOString()
+    });
+    
+    showToast(`正在下载 ${file.name}`, 'info');
+  } catch (err) {
+    showToast('下载失败: ' + err.message, 'error');
+  }
+}
+
+// 下载选中的文件
+async function downloadSelected() {
+  for (const fileId of selectedFiles) {
+    const { data: file, error } = await supabase
+      .from('files')
+      .select('*')
+      .eq('id', fileId)
+      .single();
+    
+    if (!error && file && file.type === 'file') {
+      await downloadFile(fileId);
+    }
+  }
+}
+
+// 删除选中的文件
+async function deleteSelected() {
+  if (selectedFiles.size === 0) return;
+  if (!confirm(`确定要删除选中的 ${selectedFiles.size} 个项目吗？`)) return;
+
+  for (const fileId of selectedFiles) {
+    try {
+      const { data: file, error } = await supabase
+        .from('files')
+        .select('*')
+        .eq('id', fileId)
+        .single();
+      
+      if (error || !file) continue;
+
+      // 如果是文件夹，递归删除子文件
+      if (file.type === 'folder') {
+        await deleteFolderRecursive(fileId);
+      } else {
+        // 从Storage删除文件
+        if (file.storage_path) {
+          await supabase.storage
+            .from(STORAGE_BUCKET)
+            .remove([file.storage_path]);
+        }
+      }
+
+      // 删除数据库记录
+      await supabase.from('files').delete().eq('id', fileId);
+      
+      // 记录日志
+      await supabase.from('operation_logs').insert({
+        username: currentUser.username || currentUser.phone,
+        action: 'delete',
+        file_name: file.name,
+        detail: `删除${file.type === 'folder' ? '文件夹' : '文件'} ${file.name}`,
+        created_at: new Date().toISOString()
+      });
+    } catch (err) {
+      showToast(`删除失败: ${err.message}`, 'error');
+    }
+  }
+
+  selectedFiles.clear();
+  showToast('删除成功', 'success');
+  loadFiles();
+}
+
+// 递归删除文件夹及其内容
+async function deleteFolderRecursive(folderId) {
+  const { data: children, error } = await supabase
+    .from('files')
+    .select('*')
+    .eq('parent_id', folderId);
+  
+  if (error) return;
+  
+  for (const child of children || []) {
+    if (child.type === 'folder') {
+      await deleteFolderRecursive(child.id);
+    } else {
+      // 从Storage删除文件
+      if (child.storage_path) {
+        await supabase.storage
+          .from(STORAGE_BUCKET)
+          .remove([child.storage_path]);
+      }
+    }
+    await supabase.from('files').delete().eq('id', child.id);
+  }
+}
+
+// 新建文件夹
+function showNewFolderModal() {
+  document.getElementById('newfolder-name').value = '';
+  showModal('newfolder-modal');
+}
+
+async function handleNewFolder() {
+  const name = document.getElementById('newfolder-name').value.trim();
+  if (!name) { showToast('请输入文件夹名称', 'warning'); return; }
+
+  // 检查同名
+  const { data: existing, error: checkError } = await supabase
+    .from('files')
+    .select('id')
+    .eq('parent_id', currentFolderId)
+    .eq('name', name)
+    .eq('type', 'folder')
+    .limit(1);
+  
+  if (checkError) {
+    showToast('检查文件夹失败: ' + checkError.message, 'error');
+    return;
+  }
+  
+  if (existing && existing.length > 0) {
+    showToast('该文件夹下已存在同名文件夹', 'error');
+    return;
+  }
+
+  try {
+    const { error: insertError } = await supabase
+      .from('files')
+      .insert({
+        name: name,
+        type: 'folder',
+        parent_id: currentFolderId,
+        size: 0,
+        storage_path: null,
+        public_url: null,
+        uploaded_by: currentUser.username || currentUser.phone,
+        created_at: new Date().toISOString()
+      });
+    
+    if (insertError) throw insertError;
+    
+    // 记录日志
+    await supabase.from('operation_logs').insert({
+      username: currentUser.username || currentUser.phone,
+      action: 'create_folder',
+      file_name: name,
+      detail: `新建文件夹 ${name}`,
+      created_at: new Date().toISOString()
+    });
+    
+    hideModal('newfolder-modal');
+    showToast('文件夹创建成功', 'success');
+    loadFiles();
+  } catch (err) {
+    showToast('创建文件夹失败: ' + err.message, 'error');
+  }
+}
+
+// 显示移动模态框
+async function showMoveModal() {
+  if (selectedFiles.size === 0) return;
+  moveTargetFolderId = null;
+
+  // 加载所有文件夹
+  const { data: folders, error } = await supabase
+    .from('files')
+    .select('*')
+    .eq('type', 'folder');
+  
+  if (error) {
+    showToast('加载文件夹失败: ' + error.message, 'error');
+    return;
+  }
+
+  // 排除选中的文件夹自身及其子文件夹
+  const selectedIds = new Set(selectedFiles);
+  const excludeIds = new Set();
+  for (const sid of selectedIds) {
+    excludeIds.add(sid);
+    await collectSubFolderIds(sid, folders || [], excludeIds);
+  }
+
+  const availableFolders = (folders || []).filter(f => !excludeIds.has(f.id));
+
+  const tree = document.getElementById('move-folder-tree');
+  if (availableFolders.length === 0) {
+    tree.innerHTML = '<div style="color:var(--text-muted);padding:1rem;text-align:center;">没有可用的目标文件夹</div>';
+  } else {
+    tree.innerHTML = `
+      <div class="folder-tree-item ${moveTargetFolderId === null ? 'selected' : ''}" onclick="selectMoveTarget(null, this)">
+        <span>📁</span> <span>根目录</span>
+      </div>
+    ` + availableFolders.map(f => `
+      <div class="folder-tree-item" onclick="selectMoveTarget('${f.id}', this)">
+        <span>📁</span> <span>${f.name}</span>
+      </div>
+    `).join('');
+  }
+
+  showModal('move-modal');
+}
+
+// 收集子文件夹ID
+async function collectSubFolderIds(parentId, allFiles, excludeIds) {
+  const children = allFiles.filter(f => f.parent_id === parentId && f.type === 'folder');
+  for (const child of children) {
+    excludeIds.add(child.id);
+    await collectSubFolderIds(child.id, allFiles, excludeIds);
+  }
+}
+
+// 选择移动目标
+function selectMoveTarget(folderId, el) {
+  moveTargetFolderId = folderId;
+  document.querySelectorAll('#move-folder-tree .folder-tree-item').forEach(item => item.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// 执行移动
+async function handleMove() {
+  if (selectedFiles.size === 0) return;
+
+  for (const fileId of selectedFiles) {
+    try {
+      const { data: file, error } = await supabase
+        .from('files')
+        .select('*')
+        .eq('id', fileId)
+        .single();
+      
+      if (error || !file) continue;
+
+      const oldParent = file.parent_id;
+      
+      // 更新文件的parent_id
+      const { error: updateError } = await supabase
+        .from('files')
+        .update({ parent_id: moveTargetFolderId, updated_at: new Date().toISOString() })
+        .eq('id', fileId);
+      
+      if (updateError) throw updateError;
+
+      // 记录日志
+      const targetName = moveTargetFolderId === null ? '根目录' : `文件夹ID:${moveTargetFolderId}`;
+      await supabase.from('operation_logs').insert({
+        username: currentUser.username || currentUser.phone,
+        action: 'move',
+        file_name: file.name,
+        detail: `移动 ${file.name} 到 ${targetName}`,
+        created_at: new Date().toISOString()
+      });
+    } catch (err) {
+      showToast(`移动失败: ${err.message}`, 'error');
+    }
+  }
+
+  selectedFiles.clear();
+  hideModal('move-modal');
+  showToast('移动成功', 'success');
+  loadFiles();
+}
+
+// ==================== 楼主管理页面功能 ====================
+
+// 加载用户列表
+async function loadUsers() {
+  try {
+    const search = (document.getElementById('user-search')?.value || '').trim().toLowerCase();
+    
+    let query = supabase.from('user_profiles').select('*');
+    
+    const { data: allUsers, error } = await query;
+    
+    if (error) throw error;
+    
+    const filtered = (allUsers || []).filter(u => {
+      if (!search) return true;
+      return (u.username || '').toLowerCase().includes(search) ||
+             (u.phone || '').toLowerCase().includes(search) ||
+             (u.workplace || '').toLowerCase().includes(search);
+    });
+
+    const tbody = document.getElementById('users-tbody');
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;">暂无用户数据</td></tr>';
+    } else {
+      tbody.innerHTML = filtered.map(u => `
+        <tr>
+          <td style="color:var(--text-primary);">${u.username || '-'}</td>
+          <td>${u.phone || '-'}</td>
+          <td>${u.workplace || '-'}</td>
+          <td>${u.is_admin ? '<span class="status-badge status-approved">是</span>' : '<span class="status-badge status-rejected">否</span>'}</td>
+          <td>${formatDate(u.created_at)}</td>
+        </tr>
+      `).join('');
+    }
+  } catch (err) {
+    showToast('加载用户失败: ' + err.message, 'error');
+  }
+}
+
+// 加载日志
+async function loadLogs() {
+  try {
+    const search = (document.getElementById('log-search')?.value || '').trim().toLowerCase();
+    const filter = document.getElementById('log-filter')?.value || '';
+    
+    let query = supabase.from('operation_logs').select('*').order('created_at', { ascending: false });
+    
+    if (filter) {
+      query = query.eq('action', filter);
+    }
+    
+    const { data: allLogs, error } = await query;
+    
+    if (error) throw error;
+    
+    const filtered = (allLogs || []).filter(l => {
+      if (search && !(l.username || '').toLowerCase().includes(search)) return false;
+      return true;
+    });
+
+    const actionLabels = {
+      upload: '上传', download: '下载', delete: '删除', move: '移动', create_folder: '新建文件夹', admin_unlock: '权限解锁'
+    };
+
+    const tbody = document.getElementById('logs-tbody');
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:2rem;">暂无日志</td></tr>';
+    } else {
+      tbody.innerHTML = filtered.map(l => `
+        <tr>
+          <td style="color:var(--text-primary);">${l.username || '-'}</td>
+          <td><span class="status-badge status-pending">${actionLabels[l.action] || l.action}</span></td>
+          <td>${l.file_name || '-'}</td>
+          <td>${l.detail || '-'}</td>
+          <td>${formatDate(l.created_at)}</td>
+        </tr>
+      `).join('');
+    }
+  } catch (err) {
+    showToast('加载日志失败: ' + err.message, 'error');
+  }
+}
+
+// 加载权限申请
+async function loadRequests() {
+  try {
+    const { data: allRequests, error } = await supabase
+      .from('permission_requests')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+
+    const tbody = document.getElementById('requests-tbody');
+    if (!allRequests || allRequests.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:2rem;">暂无申请</td></tr>';
+    } else {
+      tbody.innerHTML = allRequests.map(r => {
+        const statusMap = {
+          pending: '<span class="status-badge status-pending">待审核</span>',
+          approved: '<span class="status-badge status-approved">已通过</span>',
+          rejected: '<span class="status-badge status-rejected">已拒绝</span>'
+        };
+        let actions = '';
+        if (r.status === 'pending') {
+          actions = `
+            <button class="btn btn-sm btn-green" onclick="approveRequest('${r.id}')">通过</button>
+            <button class="btn btn-sm btn-red" onclick="rejectRequest('${r.id}')">拒绝</button>
+          `;
+        }
+        return `
+          <tr>
+            <td style="color:var(--text-primary);">${r.username || '-'}</td>
+            <td>${r.phone || '-'}</td>
+            <td>${r.email || '-'}</td>
+            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${r.reason || ''}">${r.reason || '-'}</td>
+            <td>${statusMap[r.status] || r.status}</td>
+            <td style="font-family:'Orbitron',monospace;letter-spacing:0.1em;color:${r.secret_key ? 'var(--neon-green)' : 'var(--text-muted)'};">${r.secret_key || '-'}</td>
+            <td>${formatDate(r.created_at)}</td>
+            <td style="white-space:nowrap;">${actions}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  } catch (err) {
+    showToast('加载申请失败: ' + err.message, 'error');
+  }
+}
+
+// 通过申请
+async function approveRequest(requestId) {
+  try {
+    const { data: request, error } = await supabase
+      .from('permission_requests')
+      .select('*')
+      .eq('id', requestId)
+      .single();
+    
+    if (error || !request) {
+      showToast('申请不存在', 'error');
+      return;
+    }
+
+    const secretKey = generateSecretKey();
+    
+    const { error: updateError } = await supabase
+      .from('permission_requests')
+      .update({
+        status: 'approved',
+        secret_key: secretKey,
+        reviewed_at: new Date().toISOString()
+      })
+      .eq('id', requestId);
+    
+    if (updateError) throw updateError;
+
+    // 显示秘钥
+    document.getElementById('secretkey-value').textContent = secretKey;
+    showModal('secretkey-modal');
+
+    showToast('申请已通过', 'success');
+    loadRequests();
+  } catch (err) {
+    showToast('操作失败: ' + err.message, 'error');
+  }
+}
+
+// 拒绝申请
+async function rejectRequest(requestId) {
+  try {
+    const { data: request, error } = await supabase
+      .from('permission_requests')
+      .select('*')
+      .eq('id', requestId)
+      .single();
+    
+    if (error || !request) {
+      showToast('申请不存在', 'error');
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from('permission_requests')
+      .update({
+        status: 'rejected',
+        reviewed_at: new Date().toISOString()
+      })
+      .eq('id', requestId);
+    
+    if (updateError) throw updateError;
+
+    showToast('申请已拒绝', 'info');
+    loadRequests();
+  } catch (err) {
+    showToast('操作失败: ' + err.message, 'error');
+  }
+}
+
+// 加载系统信息
+async function loadSystemInfo() {
+  try {
+    const [{ data: allUsers }, { data: allFiles }, { data: allLogs }] = await Promise.all([
+      supabase.from('user_profiles').select('*'),
+      supabase.from('files').select('*'),
+      supabase.from('operation_logs').select('*')
+    ]);
+
+    const totalUsers = (allUsers || []).length;
+    const adminCount = (allUsers || []).filter(u => u.is_admin).length;
+    const totalFiles = (allFiles || []).filter(f => f.type === 'file').length;
+    const totalFolders = (allFiles || []).filter(f => f.type === 'folder').length;
+    let totalSize = 0;
+    (allFiles || []).forEach(f => { if (f.type === 'file' && f.size) totalSize += f.size; });
+
+    document.getElementById('system-stats').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-value">${totalUsers}</div>
+        <div class="stat-label">总用户数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--neon-purple);">${adminCount}</div>
+        <div class="stat-label">管理员数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--neon-green);">${totalFiles}</div>
+        <div class="stat-label">总文件数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--neon-yellow);">${totalFolders}</div>
+        <div class="stat-label">文件夹数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--neon-pink);">${formatSize(totalSize)}</div>
+        <div class="stat-label">总存储使用量</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${(allLogs || []).length}</div>
+        <div class="stat-label">操作日志数</div>
+      </div>
+    `;
+
+    // 加载公告
+    const announcement = sessionStorage.getItem('systemAnnouncement') || '';
+    document.getElementById('announcement-editor').value = announcement;
+  } catch (err) {
+    showToast('加载系统信息失败: ' + err.message, 'error');
+  }
+}
+
+// 保存公告
+function saveAnnouncement() {
+  const announcement = document.getElementById('announcement-editor').value;
+  sessionStorage.setItem('systemAnnouncement', announcement);
+  showToast('公告已保存', 'success');
+}
+
+// ==================== 粒子背景系统 ====================
+
+class ParticleSystem {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.particles = [];
+    this.mouseX = 0;
+    this.mouseY = 0;
+    this.resize();
+    this.init();
+    this.bindEvents();
+    this.animate();
+  }
+
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  }
+
+  init() {
+    this.particles = [];
+    const count = Math.min(Math.floor((this.canvas.width * this.canvas.height) / 12000), 120);
+    for (let i = 0; i < count; i++) {
+      this.particles.push({
+        x: Math.random() * this.canvas.width,
+        y: Math.random() * this.canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 2 + 0.5,
+        opacity: Math.random() * 0.5 + 0.1,
+        color: Math.random() > 0.7 ? '#b000ff' : '#00f0ff'
+      });
+    }
+  }
+
+  bindEvents() {
+    window.addEventListener('resize', () => { this.resize(); this.init(); });
+    window.addEventListener('mousemove', (e) => {
+      this.mouseX = e.clientX;
+      this.mouseY = e.clientY;
+    });
+  }
+
+  animate() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    const { particles, ctx, canvas } = this;
+
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // 边界反弹
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+      // 绘制粒子
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.opacity;
+      ctx.fill();
+
+      // 绘制连线
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = '#00f0ff';
+          ctx.globalAlpha = (1 - dist / 120) * 0.15;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+
+      // 鼠标交互
+      const mdx = p.x - this.mouseX;
+      const mdy = p.y - this.mouseY;
+      const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+      if (mdist < 150) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(this.mouseX, this.mouseY);
+        ctx.strokeStyle = '#b000ff';
+        ctx.globalAlpha = (1 - mdist / 150) * 0.2;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// ==================== 模态框点击遮罩关闭 ====================
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove('active');
+    }
+  });
+});
+
+// ==================== 键盘事件 ====================
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+  }
+  // 登录模态框回车提交
+  if (e.key === 'Enter' && document.getElementById('login-modal').classList.contains('active')) {
+    handleLogin();
+  }
+  // 注册模态框回车提交
+  if (e.key === 'Enter' && document.getElementById('register-modal').classList.contains('active')) {
+    handleRegister();
+  }
+});
+
+// ==================== 应用初始化 ====================
+
+async function initApp() {
+  try {
+    await initAdminAccount();
+
+    // 初始化粒子系统
+    const canvas = document.getElementById('particle-canvas');
+    new ParticleSystem(canvas);
+
+    // 检查是否有已登录的会话
+    const { data: { session } } = await supabase.auth.getSession();
+    const savedUser = sessionStorage.getItem('currentUser');
+    
+    if (session && savedUser) {
+      currentUser = JSON.parse(savedUser);
+      // 验证用户是否仍然存在
+      const { data: userExists, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', currentUser.id)
+        .limit(1)
+        .single();
+      
+      if (!error && userExists) {
+        currentUser = userExists;
+        sessionStorage.setItem('currentUser', JSON.stringify(userExists));
+        if (userExists.username === '2429040001') {
+          enterAdminPage();
+        } else {
+          enterWorkspace();
+        }
+      } else {
+        sessionStorage.removeItem('currentUser');
+        await supabase.auth.signOut();
+      }
+    }
+  } catch (err) {
+    console.error('应用初始化失败:', err);
+    showToast('系统初始化失败，请刷新页面重试', 'error');
+  }
+}
+
+// 启动应用
+initApp();
+</script>
 </body>
 </html>
